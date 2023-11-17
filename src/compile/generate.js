@@ -32,21 +32,33 @@ function gen(node) {
     } else {
         let text = node.text;
         if (!defaultTagRE.test(text)) {// 文本
-            return `_v(${text})`
-        } else {// 插值表达式
-            let match;
-            while (match = defaultTagRE.exec(text)) {
-                console.log(match)
-                break;
-            }
-            return ''
+            return `_v(${JSON.stringify(text)})`
         }
+        // 插值表达式
+        let lastIndex = defaultTagRE.lastIndex = 0;
+        let tokens = [];
+        let match;
+        while (match = defaultTagRE.exec(text)) {
+            let index = match.index;
+            if (index > lastIndex) {// 插值表达式前面有文本，进行文本添加
+                tokens.push(JSON.stringify(text.slice(lastIndex, index)))
+            }
+            // 插值表达式
+            tokens.push(`_s(${match[1].trim()})`)
+            lastIndex = index + match[0].length;
+        }
+        // 插值表达式后面有文本，进行文本添加
+        if (lastIndex < text.length) {
+            tokens.push(JSON.stringify(text.slice(lastIndex)))
+        }
+        return  `_v(${tokens.join('+')})`
     }
 }
 
 export function generate(el) {
     console.log(el)
     let children = genChildren(el);
-    let code = `-c(${el.tag}, ${el.attrs.length ? `${genProps(el.attrs)}` : 'null'}), ${children ? children : 'null'})`
+    let code = `_c(${el.tag}, ${el.attrs.length ? `${genProps(el.attrs)}` : 'null'}), ${children ? children : 'null'})`
     console.log(code)
+    return code;
 }

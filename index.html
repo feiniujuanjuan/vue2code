@@ -7,7 +7,10 @@
     <script src="./dist/Vue.js"></script>
 </head>
 <body>
-    <div id="app" class="hh" style="color: red; font-size: 12px;">{{ msg }}gg</div>
+    <div id="app" class="hh" style="color: red; font-size: 12px;">
+        {{ msg }}{{a}}gg
+        <h1>hhh</h1>
+    </div>
     <script>
         window.vue = new Vue({
             el: '#app',
@@ -21,6 +24,10 @@
                 }
             }
         })
+        let obj = {a: 1, b:2}
+        with(obj) {
+        console.log(a,b)
+        }
         // vue._data.list.push({a: 4})
         // console.log(vue)
     </script>

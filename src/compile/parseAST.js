@@ -28,7 +28,7 @@ function start(tag, attr) {// 开始标签
   stack.push(element)
 }
 function charts(text) {// 获取文本
-  text = text.replace(/s/g, '');
+  text = text.replace(/\s/g, '');// 清空空格
   if (text) {
     createParent.children.push({
       type: 3,

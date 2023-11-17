@@ -6,4 +6,7 @@ export function compileToFunction(el) {
   let ast = parseHTML(el);
   // 2、将ast语法树变成render函数
   let code = generate(ast);
+  // 3、将render字符串变成render函数
+  let render = new Function(`with(this){return ${code}}`);
+  return render;
 }

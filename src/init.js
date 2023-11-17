@@ -1,5 +1,6 @@
 import initState from "./initState";
 import { compileToFunction } from "./compile/index";
+import { mountComponent } from "./lifecycle";
 
 export default function initMixin(Vue) {
     Vue.prototype._init = function(options) {
@@ -23,10 +24,12 @@ export default function initMixin(Vue) {
             if (!template && el) {
                 // 获取html
                 el = el.outerHTML;
-                console.log(el)
                 // 变成ast语法树
-                let ast = compileToFunction(el)
+                let render = compileToFunction(el);
+                options.render = render;
             }
         }
+        // 挂载dom
+        mountComponent(vm, el);
     }
 }
