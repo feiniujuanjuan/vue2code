@@ -19,6 +19,7 @@ export default function initMixin(Vue) {
         // render > template > el
         // 获取dom元素
         el = document.querySelector(el);
+        vm.$el = el;
         if (!options.render) {
             let template = options.template;
             if (!template && el) {

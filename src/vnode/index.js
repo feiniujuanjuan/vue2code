@@ -13,7 +13,7 @@ export function renderMixin(Vue) {
         let vm = this;
         let render = vm.$options.render;
         // 执行render函数得到虚拟dom
-        let vnode = render().call(this);
+        let vnode = render.call(vm);
         console.log(vnode)
         return vnode;
     }
