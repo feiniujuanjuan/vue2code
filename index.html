@@ -12,6 +12,16 @@
         <h1>{{ msg }}</h1>
     </div>
     <script>
+        Vue.Mixin({
+            created: function a() {
+                console.log('a')
+            }
+        })
+        Vue.Mixin({
+            created: function b() {
+                console.log('b')
+            }
+        })
         window.vue = new Vue({
             el: '#app',
             data() {
@@ -22,14 +32,20 @@
                     list: [1,2,3],
                     arr: [{a: 1}]
                 }
+            },
+            beforeCreate() {
+                console.log('beforeCreate');
+            },
+            created() {
+                console.log('created');
+            },
+            beforeMount() {
+                console.log('beforeMount')
+            },
+            mounted() {
+                console.log('mounted')
             }
         })
-        // let obj = {a: 1, b:2}
-        // with(obj) {
-        //     console.log(a,b)
-        // }
-        // vue._data.list.push({a: 4})
-        // console.log(vue)
     </script>
 </body>
 </html>
