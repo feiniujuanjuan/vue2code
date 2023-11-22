@@ -29,10 +29,12 @@ methods.forEach(item => {
                 inserted = args.splice(2);
                 break;
         }
+        const ob = this.__ob__;
         if (inserted) {
             // 对我们添加的数据进行劫持
-            this.__ob__.oberserArray(inserted);
+            ob.oberserArray(inserted);
         }
+        ob.dep.notify();
         return result;
     }
 })

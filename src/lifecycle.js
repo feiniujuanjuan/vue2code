@@ -1,14 +1,18 @@
-import watcher from "./oberser/watcher";
+import Watcher from "./oberser/watcher";
 import { patch } from "./vnode/patch"
 
 export function mountComponent(vm, el) {
-    // vm._render将render函数变成vnode
-    // vm._updata将vnode变成真实dom
     callHook(vm, 'beforeMount');
     let updataComponent = () => {
+        // vm._render将render函数变成vnode
+        // vm._updata将vnode变成真实dom
         vm._updata(vm._render());
     }
-    new watcher(vm, updataComponent, () => {}, true);
+    /**
+     * 数据变化，自动更新视图
+     * vue中更新组件的策略是：以组件为单位，给每个组件添加一个watcher，属性变化之后，调用watcher
+     */
+    new Watcher(vm, updataComponent, () => {}, true);
     callHook(vm, 'mounted');
 }
 

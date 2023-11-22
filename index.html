@@ -10,6 +10,7 @@
     <div id="app" class="hh" style="color: red; font-size: 12px;">
         {{ msg }}{{ a }}gg
         <h1>{{ msg }}</h1>
+        {{ list }}
     </div>
     <script>
         Vue.Mixin({
@@ -46,6 +47,10 @@
                 console.log('mounted')
             }
         })
+        setTimeout(()=>{
+            // vue.msg = 'wsq'
+            vue.list.push(4)
+        },1000)
     </script>
 </body>
 </html>
