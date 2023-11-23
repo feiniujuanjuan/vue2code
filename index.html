@@ -48,9 +48,21 @@
             }
         })
         setTimeout(()=>{
-            // vue.msg = 'wsq'
+            vue.msg = 'wsq'
             vue.list.push(4)
+            vue.list.push(5)
+            console.log(vue.$el.innerHTML)
+            vue.$nextTick(()=>{
+                console.log(vue.$el.innerHTML)
+            })
         },1000)
+        setTimeout(()=>{
+            vue.msg = 'zsy'
+            console.log(vue.$el.innerHTML)
+            vue.$nextTick(()=>{
+                console.log(vue.$el.innerHTML)
+            })
+        },3000)
     </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import oberser from "./oberser/index";
+import { nextTick } from "./utils/nextTick";
 
 export default function initState(vm) {
     let opts = vm.$options;
@@ -26,4 +27,11 @@ function proxy(vm, source, key) {
             vm[source][key] = newValue;
         }
     })
+}
+
+export function stateMixin(Vue) {
+    Vue.prototype.$nextTick = function(cb) {// nextTick: 数据更新之后获取到最新的DOM
+        // console.log(cb)
+        nextTick(cb)
+    }
 }
