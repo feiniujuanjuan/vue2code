@@ -19,7 +19,7 @@ starts.data = function(parentVal, childVal) {
 }
 starts.computed = function() {}
 starts.methods = function() {}
-starts.watch = function() {}
+// starts.watch = function() {}
 LIFECYCLE_HOOKS.forEach(hook => {
     starts[hook] = mergeHook;
 })
