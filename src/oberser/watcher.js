@@ -7,8 +7,8 @@ class Watcher {
         this.vm = vm;
         this.id = id++;
         this.exprOrfn = updataComponent;
-        this.cb = this.cb;
-        this.options = this.options;
+        this.cb = cb;
+        this.options = options;
         this.deps = [];
         this.depsId = new Set();
         if (typeof updataComponent === 'function') {
@@ -47,7 +47,10 @@ let queue = [] // 将需要批量更新的watcher  存放到一个队列中
 let has = {}
 let pending = false
 function flushWatcher() {
-    queue.forEach(watcher => watcher.run());
+    queue.forEach(watcher => {
+        watcher.run();
+        watcher.cb();
+    });
     queue = [];
     has = {};
     pending = false;

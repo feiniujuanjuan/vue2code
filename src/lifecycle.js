@@ -12,7 +12,10 @@ export function mountComponent(vm, el) {
      * 数据变化，自动更新视图
      * vue中更新组件的策略是：以组件为单位，给每个组件添加一个watcher，属性变化之后，调用watcher
      */
-    new Watcher(vm, updataComponent, () => {}, true);
+    new Watcher(vm, updataComponent, () => {
+        // 执行updated生命周期
+        callHook(vm, 'updated');
+    }, true);
     callHook(vm, 'mounted');
 }
 
