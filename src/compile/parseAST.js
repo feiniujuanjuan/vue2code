@@ -8,6 +8,7 @@ const startTagClose = /^\s*(\/?)>/
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`)
 
 export function parseHTML(html) {
+  html = html.trim()
   function createASTElement(tag, attrs) {
     return {
       tag,

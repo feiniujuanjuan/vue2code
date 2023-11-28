@@ -23,9 +23,12 @@ let vm1 = new Vue({
     }
 });
 let render1 = compileToFunction(`
-    <div id="a" class="zz" style="color: red;backgroundColor: blue;" zsy="ccc">
-    {{name}}
-    <div>`);
+    <ul>
+        <li style="color: red;">a</li>
+        <li style="color: green;">b</li>
+        <li style="color: blue;">c</li>
+    </ul>
+`);
 let vnode1 = render1.call(vm1);
 document.body.appendChild(createEl(vnode1));
 
@@ -35,10 +38,16 @@ let vm2 = new Vue({
         name: 'wsq'
     }
 });
-let render2 = compileToFunction('<div id="b" style="color: red;"><span>{{name}}</span><div>');
+let render2 = compileToFunction(`
+    <ul>
+        <li style="color: red;">a</li>
+        <li style="color: green;">b</li>
+        <li style="color: blue;">c</li>
+        <li style="color: pink;">d</li>
+    </ul>
+`);
 let vnode2 = render2.call(vm2);
 // patch比对
 setTimeout(()=> {
     patch(vnode1, vnode2)
 }, 2000)
-// vm1._updata(render1)

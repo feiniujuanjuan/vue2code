@@ -23,7 +23,7 @@ export function patch(oldVnode, vnode) {
         let oldChildren = oldVnode.children || [];
         let newChildren = vnode.children || [];
         if (oldChildren.length > 0 && newChildren.length > 0) {// 老的有，新的也有
-
+            updataChildren(oldChildren, newChildren, el);
         } else if (newChildren.length > 0) { // 新的有，老的没有
             newChildren.forEach(child => {
                 el.appendChild(createEl(child));
@@ -31,6 +31,50 @@ export function patch(oldVnode, vnode) {
         } else if (oldChildren.length > 0) { // 老的有，新的没有
             el.innerHTML = ''
         }
+    }
+}
+
+function updataChildren(oldChildren, newChildren, el) {
+    // diff 双指针对比
+    let oldStartIndex = 0;
+    let oldStartVnode = oldChildren[oldStartIndex];
+    let oldEndIndex = oldChildren.length - 1;
+    let oldEndVnode = oldChildren[oldEndIndex];
+
+    let newStartIndex = 0;
+    let newStartVnode = newChildren[newStartIndex];
+    let newEndIndex = newChildren.length - 1;
+    let newEndVnode = newChildren[newEndIndex];
+
+    while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+        if (isSameVnode(oldStartVnode, newStartVnode)) { // 从前面开始比较
+            patch(oldStartVnode, newStartVnode);
+            oldStartVnode = oldChildren[++oldStartIndex];
+            newStartVnode = newChildren[++newStartIndex];
+        } else if (isSameVnode(oldEndVnode, newEndVnode)) { // 从后面开始比较
+            patch(oldEndVnode, newEndVnode);
+            oldEndVnode = oldChildren[--oldEndIndex];
+            newEndVnode = newChildren[--newEndIndex];
+        } else if (isSameVnode(oldStartVnode, newEndVnode)) { // 交叉前后比较
+            patch(oldStartVnode, newEndVnode);
+            oldStartVnode = oldChildren[++oldStartIndex];
+            newEndVnode = newChildren[--newEndIndex];
+        } else if (isSameVnode(oldEndVnode, newStartVnode)) { // 交叉后前比较
+            patch(oldEndVnode, newStartVnode);
+            oldEndVnode = oldChildren[--oldEndIndex];
+            newStartVnode = newChildren[++newStartIndex];
+        }
+    }
+
+    // 添加新元素
+    if (newStartIndex <= newEndIndex) {
+        for(let i = newStartIndex; i <= newEndIndex; i++) {
+            el.appendChild(createEl(newChildren[i]));
+        }
+    }
+
+    function isSameVnode(child1, child2) {
+        return child1.tag === child2.tag && child1.key === child2.key;
     }
 }
 
