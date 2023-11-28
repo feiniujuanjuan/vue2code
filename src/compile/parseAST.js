@@ -7,44 +7,44 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`)
 const startTagClose = /^\s*(\/?)>/
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`)
 
-function createASTElement(tag, attrs) {
-  return {
-    tag,
-    attrs,
-    children: [],
-    type: 1,
-    parent: null
-  }
-}
-let root;// 根元素
-let createParent;// 当前元素父元素
-let stack=[];// 栈
-function start(tag, attr) {// 开始标签
-  let element = createASTElement(tag, attr);
-  if (!root) {
-    root = element;
-  }
-  createParent = element;
-  stack.push(element)
-}
-function charts(text) {// 获取文本
-  text = text.replace(/\s/g, '');// 清空空格
-  if (text) {
-    createParent.children.push({
-      type: 3,
-      text
-    })
-  }
-}
-function end(tag) {// 结束标签
-  let element = stack.pop();
-  createParent = stack[stack.length -1];
-  if (createParent) {
-    element.parent = createParent.tag;
-    createParent.children.push(element);
-  }
-}
 export function parseHTML(html) {
+  function createASTElement(tag, attrs) {
+    return {
+      tag,
+      attrs,
+      children: [],
+      type: 1,
+      parent: null
+    }
+  }
+  let root;// 根元素
+  let createParent;// 当前元素父元素
+  let stack=[];// 栈
+  function start(tag, attr) {// 开始标签
+    let element = createASTElement(tag, attr);
+    if (!root) {
+      root = element;
+    }
+    createParent = element;
+    stack.push(element)
+  }
+  function charts(text) {// 获取文本
+    text = text.replace(/\s/g, '');// 清空空格
+    if (text) {
+      createParent.children.push({
+        type: 3,
+        text
+      })
+    }
+  }
+  function end(tag) {// 结束标签
+    let element = stack.pop();
+    createParent = stack[stack.length -1];
+    if (createParent) {
+      element.parent = createParent.tag;
+      createParent.children.push(element);
+    }
+  }
   while(html) {
     let textEnd = html.indexOf('<')
     if (textEnd === 0) { // 标签

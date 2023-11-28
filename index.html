@@ -3,91 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="./dist/Vue.js"></script>
+    <title>diff</title>
 </head>
 <body>
-    <div id="app" class="hh" style="color: red; font-size: 12px;">
-        {{ msg }}{{ a }}gg
-        <h1>{{ msg }}</h1>
-        {{ list }}
-    </div>
-    <script>
-        // Vue.Mixin({
-        //     created: function a() {
-        //         console.log('a')
-        //     }
-        // })
-        // Vue.Mixin({
-        //     created: function b() {
-        //         console.log('b')
-        //     }
-        // })
-        window.vue = new Vue({
-            el: '#app',
-            data() {
-                return {
-                    msg: 'hello',
-                    a: 2,
-                    b: {a: 4},
-                    list: [1,2,3],
-                    arr: [{a: 1}]
-                }
-            },
-            watch: {// 四种写法
-                // msg(newVal, oldVal) {// 函数
-                //     console.log(newVal)
-                // },
-                msg: {// 对象
-                    immediate: true,
-                    handler(newVal, oldVal) {
-                        console.log(newVal, oldVal)
-                    }
-                },
-                // msg: [(// 数组
-                //     newVal, oldVal) => {}, 
-                //     (newVal, oldVal) => {}
-                // ],
-                // msg: 'watchMsg',// methods方法字符串
-            },
-            beforeCreate() {
-                console.log('beforeCreate');
-            },
-            created() {
-                console.log('created');
-            },
-            beforeMount() {
-                console.log('beforeMount')
-            },
-            mounted() {
-                console.log('mounted')
-            },
-            updated() {
-                console.log('updated')
-            },
-            methods: {
-                watchMsg(newVal) {
-                    console.log(newVal)
-                }
-            }
-        })
-        // setTimeout(()=>{
-        //     vue.msg = 'wsq'
-        //     vue.list.push(4)
-        //     vue.list.push(5)
-        //     console.log(vue.$el.innerHTML)
-        //     vue.$nextTick(()=>{
-        //         console.log(vue.$el.innerHTML)
-        //     })
-        // },1000)
-        // setTimeout(()=>{
-        //     vue.msg = 'zsy'
-        //     console.log(vue.$el.innerHTML)
-        //     vue.$nextTick(()=>{
-        //         console.log(vue.$el.innerHTML)
-        //     })
-        // },3000)
-        vue.msg = 'wsq'
-    </script>
+    <script src="./dist/Vue.js"></script>
 </body>
 </html>
