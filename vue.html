@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+  <ul id="app">
+    <li v-for="(item, index) in list" :key="item.id">{{ item.text }}</li>
+  </ul>
+  <script>
+    let vm = new Vue({
+      el: "#app",
+      data: {
+        list:[{
+          id: 0,
+          text: 1,
+        }, {
+          id: 1,
+          text: 2,
+        }, {
+          id: 2,
+          text: 3,
+        },]
+      }
+    })
+    setTimeout(()=> {
+      console.log('hhh')
+      vm.$set(vm, "list", [  {
+          id: 3,
+          text: 4,
+        },{
+          id: 2,
+          text: 3,
+        },{
+          id: 1,
+          text: 2,
+        },{
+          id: 0,
+          text: 1,
+        },])
+    }, 1000)
+  </script>
+</body>
+</html>

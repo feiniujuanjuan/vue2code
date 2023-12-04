@@ -23,7 +23,14 @@ export function lifecycleMixin(Vue) {
     // vnode-->真实dom
     Vue.prototype._updata = function(vnode) {
         let vm = this;
-        vm.$el = patch(vm.$el, vnode);
+        // 实现最小dom更新
+        let prevVnode = vm._vnode;
+        if (!prevVnode) {// 首次
+            vm.$el = patch(vm.$el, vnode);
+            vm._vnode = vnode;
+        } else {// 更新
+            patch(prevVnode, vnode);
+        }
     }
 }
 

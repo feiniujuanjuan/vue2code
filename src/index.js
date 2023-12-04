@@ -24,9 +24,9 @@ let vm1 = new Vue({
 });
 let render1 = compileToFunction(`
     <ul>
-        <li style="color: red;">a</li>
-        <li style="color: green;">b</li>
-        <li style="color: blue;">c</li>
+        <li style="color: red;" key="a">a</li>
+        <li style="color: green;" key="b">b</li>
+        <li style="color: blue;" key="c">c</li>
     </ul>
 `);
 let vnode1 = render1.call(vm1);
@@ -40,10 +40,10 @@ let vm2 = new Vue({
 });
 let render2 = compileToFunction(`
     <ul>
-        <li style="color: red;">a</li>
-        <li style="color: green;">b</li>
-        <li style="color: blue;">c</li>
-        <li style="color: pink;">d</li>
+        <li style="color: red;" key="a">a</li>
+        <li style="color: green;" key="b">b</li>
+        <li style="color: blue;" key="c">c</li>
+        <li style="color: green;" key="d">d</li>
     </ul>
 `);
 let vnode2 = render2.call(vm2);

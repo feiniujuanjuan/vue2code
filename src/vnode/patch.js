@@ -14,7 +14,7 @@ export function patch(oldVnode, vnode) {
             return oldVnode.el.parentNode.replaceChild(createEl(vnode), oldVnode.el);
         }
         // 文本
-        if (!oldVnode.tag) {
+        if (!oldVnode.tag && oldVnode.text != vnode.text) {
             return oldVnode.el.textContent = vnode.text;
         }
         let el = vnode.el = oldVnode.el;
@@ -23,7 +23,7 @@ export function patch(oldVnode, vnode) {
         let oldChildren = oldVnode.children || [];
         let newChildren = vnode.children || [];
         if (oldChildren.length > 0 && newChildren.length > 0) {// 老的有，新的也有
-            updataChildren(oldChildren, newChildren, el);
+            updateChildren(oldChildren, newChildren, el);
         } else if (newChildren.length > 0) { // 新的有，老的没有
             newChildren.forEach(child => {
                 el.appendChild(createEl(child));
@@ -34,7 +34,7 @@ export function patch(oldVnode, vnode) {
     }
 }
 
-function updataChildren(oldChildren, newChildren, el) {
+function updateChildren(oldChildren, newChildren, el) {
     // diff 双指针对比
     let oldStartIndex = 0;
     let oldStartVnode = oldChildren[oldStartIndex];
@@ -45,7 +45,19 @@ function updataChildren(oldChildren, newChildren, el) {
     let newStartVnode = newChildren[newStartIndex];
     let newEndIndex = newChildren.length - 1;
     let newEndVnode = newChildren[newEndIndex];
-
+    
+    // 创建旧元素映射表
+    function makeIndexByKey(child) {
+        let map = {};
+        child.forEach((item, index) => {
+            if (item.key) {
+                map[item.key] = index;
+            }
+        })
+        return map;
+    }
+    let map = makeIndexByKey(oldChildren);
+    
     while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
         if (isSameVnode(oldStartVnode, newStartVnode)) { // 从前面开始比较
             patch(oldStartVnode, newStartVnode);
@@ -56,20 +68,64 @@ function updataChildren(oldChildren, newChildren, el) {
             oldEndVnode = oldChildren[--oldEndIndex];
             newEndVnode = newChildren[--newEndIndex];
         } else if (isSameVnode(oldStartVnode, newEndVnode)) { // 交叉前后比较
+            // 插入到最后
+            el.insertBefore(oldStartVnode.el, oldEndVnode.el.nextSibling);
             patch(oldStartVnode, newEndVnode);
             oldStartVnode = oldChildren[++oldStartIndex];
             newEndVnode = newChildren[--newEndIndex];
         } else if (isSameVnode(oldEndVnode, newStartVnode)) { // 交叉后前比较
+            el.insertBefore(oldEndVnode.el, oldStartVnode.el);
             patch(oldEndVnode, newStartVnode);
             oldEndVnode = oldChildren[--oldEndIndex];
+            newStartVnode = newChildren[++newStartIndex];
+        } else {// 上面都不满足  就走暴力比对
+            // 创建旧元素映射表
+            // 新元素在旧元素里的下标
+            let moveIndex = map[newStartVnode.key];
+            if (moveIndex == undefined) {// 不存在  加入新数组中
+                el.insertBefore(createEl(newStartVnode), oldStartVnode.el);
+            } else {// 存在  把旧元素复制 
+                // 可能存在子元素  所以递归
+                patch(moveVnode, newStartVnode);
+                let moveVnode = oldChildren[moveIndex];
+                oldChildren[moveIndex] = null;
+                el.insertBefore(moveVnode.el, oldStartVnode.el);
+            }
+            // 新的元素指针位移
             newStartVnode = newChildren[++newStartIndex];
         }
     }
 
-    // 添加新元素
+    // 添加新的儿子元素
     if (newStartIndex <= newEndIndex) {
         for(let i = newStartIndex; i <= newEndIndex; i++) {
-            el.appendChild(createEl(newChildren[i]));
+            if (oldStartIndex > oldEndIndex) {// 前面有新的儿子
+                // 插入到老节点尾指针元素后面
+                let index = newStartIndex >= 0 ? oldStartIndex : oldEndIndex;
+                el.insertBefore(createEl(newChildren[i]), oldChildren[index].el);
+            } else {// 后面有新的儿子
+                el.insertBefore(createEl(newChildren[i]), oldChildren[oldStartIndex].el);
+            }
+        }
+    }
+    // 0 2 0 3
+    // 1 2 0 2 前后
+    // 2 2 1 2 前前
+    // 3 2 2 2 前前
+     
+    // 0 2 0 3
+    // 0 1 0 2
+    // 0 0 0 1
+    // 0 -1 0 0
+
+    // 删除多余元素
+    if (oldStartIndex <= oldEndIndex) {
+        for (let i = oldStartIndex; i <= oldEndIndex; i++) {
+            // 注意null
+            let child = oldChildren[i];
+            if (child !== null) {
+                el.removeChild(child.el);
+            }
         }
     }
 

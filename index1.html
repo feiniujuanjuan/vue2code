@@ -10,7 +10,7 @@
     <div id="app" class="hh" style="color: red; font-size: 12px;">
         {{ msg }}{{ a }}gg
         <h1>{{ msg }}</h1>
-        {{ list }}
+        <span>{{ list }}</span>
     </div>
     <script>
         // Vue.Mixin({
@@ -71,15 +71,15 @@
                 }
             }
         })
-        // setTimeout(()=>{
-        //     vue.msg = 'wsq'
-        //     vue.list.push(4)
-        //     vue.list.push(5)
-        //     console.log(vue.$el.innerHTML)
-        //     vue.$nextTick(()=>{
-        //         console.log(vue.$el.innerHTML)
-        //     })
-        // },1000)
+        setTimeout(()=>{
+            vue.msg = 'hh'
+            // vue.list.push(4)
+            // // vue.list.push(5)
+            // console.log(vue.$el.innerHTML)
+            // vue.$nextTick(()=>{
+            //     console.log(vue.$el.innerHTML)
+            // })
+        },1000)
         // setTimeout(()=>{
         //     vue.msg = 'zsy'
         //     console.log(vue.$el.innerHTML)
