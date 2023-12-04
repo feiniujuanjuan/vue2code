@@ -17,37 +17,38 @@ stateMixin(Vue) // $nextTick
 initGlobApi(Vue)// vue全局方法 mixin component extend...
 
 // 创建dom
-let vm1 = new Vue({
-    data: {
-        name: 'zsy'
-    }
-});
-let render1 = compileToFunction(`
-    <ul>
-        <li style="color: red;" key="a">a</li>
-        <li style="color: green;" key="b">b</li>
-        <li style="color: blue;" key="c">c</li>
-    </ul>
-`);
-let vnode1 = render1.call(vm1);
-document.body.appendChild(createEl(vnode1));
+// let vm1 = new Vue({
+//     data: {
+//         name: 'zsy'
+//     }
+// });
+// let render1 = compileToFunction(`
+//     <ul>
+//         <li style="color: red;" key="a">a</li>
+//         <li style="color: green;" key="b">b</li>
+//         <li style="color: blue;" key="c">c</li>
+//     </ul>
+// `);
+// let vnode1 = render1.call(vm1);
+// console.log(document.body)
+// document.body.appendChild(createEl(vnode1));
 
-// 进行比对
-let vm2 = new Vue({
-    data: {
-        name: 'wsq'
-    }
-});
-let render2 = compileToFunction(`
-    <ul>
-        <li style="color: red;" key="a">a</li>
-        <li style="color: green;" key="b">b</li>
-        <li style="color: blue;" key="c">c</li>
-        <li style="color: green;" key="d">d</li>
-    </ul>
-`);
-let vnode2 = render2.call(vm2);
-// patch比对
-setTimeout(()=> {
-    patch(vnode1, vnode2)
-}, 2000)
+// // 进行比对
+// let vm2 = new Vue({
+//     data: {
+//         name: 'wsq'
+//     }
+// });
+// let render2 = compileToFunction(`
+//     <ul>
+//         <li style="color: red;" key="a">a</li>
+//         <li style="color: green;" key="b">b</li>
+//         <li style="color: blue;" key="c">c</li>
+//         <li style="color: green;" key="d">d</li>
+//     </ul>
+// `);
+// let vnode2 = render2.call(vm2);
+// // patch比对
+// setTimeout(()=> {
+//     patch(vnode1, vnode2)
+// }, 2000)

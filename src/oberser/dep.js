@@ -6,10 +6,8 @@ class Dep {
     }
     // 收集watcher
     depend() {
-        // this.subs.push(Dep.target);
         Dep.target.addDep(this);
     }
-    // 
     addSub(watcher) {
         this.subs.push(watcher);
     }
@@ -21,13 +19,15 @@ class Dep {
 }
 
 Dep.target = null;
-
+let stock = [];
 export function pushTatget(watcher) {
     Dep.target = watcher;
+    stock.push(watcher);
 }
 
 export function popTatget() {
-    Dep.target = null;
+    stock.pop();
+    Dep.target = stock[stock.length - 1];
 }
 
 export default Dep;

@@ -50,6 +50,7 @@ function defineReative(data, key, value) {
     Object.defineProperty(data, key, {
         get() {
             // 将当前渲染使用到的属性相对应的dep和watcher类进行绑定
+            // 渲染的watcher、computed的watcher
             if (Dep.target) {
                 dep.depend();
                 if (childOb instanceof Oberser) {

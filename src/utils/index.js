@@ -17,7 +17,7 @@ let starts = {};
 starts.data = function(parentVal, childVal) {
     return childVal;
 }
-starts.computed = function() {}
+// starts.computed = function() {}
 starts.methods = function() {}
 // starts.watch = function() {}
 LIFECYCLE_HOOKS.forEach(hook => {

@@ -8,6 +8,8 @@ class Watcher {
         this.id = id++;
         this.exprOrfn = exprOrfn;
         this.cb = cb;
+        this.lazy = options.lazy;
+        this.dirty = this.lazy;
         this.options = options;
         this.user = !!options.user;
         this.deps = [];
@@ -25,12 +27,13 @@ class Watcher {
             }
         }
         // 更新视图  保存watcher改变前的值
-        this.value = this.get();
+        // computed 懒 调用之后才会执行
+        this.value = this.lazy ? void 0 : this.get();
     }
     // 初次渲染
     get() {
         pushTatget(this);
-        let value = this.getter();
+        let value = this.getter.call(this.vm);
         popTatget();
         return value;
     }
@@ -54,9 +57,21 @@ class Watcher {
     }
     // 视图改变
     updata() {
-        // console.log(this)
-        // this.getter();
-        queueWatcher(this);
+        if (this.lazy) {
+            this.dirty = true;
+        } else {
+            queueWatcher(this);
+        }
+    }
+    evaluate() {
+        this.value = this.get();
+        this.dirty = false;
+    }
+    depend() {
+        let i = this.deps.length;
+        while(i--) {
+            this.deps[i].depend();
+        }
     }
 }
 

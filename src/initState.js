@@ -1,3 +1,4 @@
+import Dep from "./oberser/dep";
 import oberser from "./oberser/index";
 import Watcher from "./oberser/watcher";
 import { nextTick } from "./utils/nextTick";
@@ -7,8 +8,53 @@ export default function initState(vm) {
     if (opts.data) {
         initData(vm);
     }
+    if (opts.computed) {
+        initComputed(vm);
+    }
     if (opts.watch) {
         initWatch(vm);
+    }
+}
+
+function initComputed(vm) {
+    let computed = vm.$options.computed;
+    // 每个计算属性都需要一个watcher
+    let watcher = vm._computedWatchers = {};
+    for (let key in computed) {
+        let userDef = computed[key];
+        let getter = typeof userDef == 'function' ? userDef : userDef.get;
+        watcher[key] = new Watcher(vm, getter, () => {}, {lazy: true});
+        defineComputed(vm, key, userDef);
+    }
+}
+
+let sharedPropDefinition = {}
+function defineComputed(target, key, userDef) {
+    sharedPropDefinition = {
+        enumerable: true,
+        configurable: true,
+        get: () => {},
+        set: () => {}
+    }
+    if (typeof userDef == 'function') {
+        sharedPropDefinition.get = createComputedGetter(key);
+    } else {
+        sharedPropDefinition.get = createComputedGetter(key);
+        sharedPropDefinition.set = userDef.set;
+    }
+    Object.defineProperty(target, key, sharedPropDefinition);
+}
+
+function createComputedGetter(key) {
+    return function() {
+        let watcher = this._computedWatchers[key];
+        if (watcher && watcher.dirty) {
+            watcher.evaluate();
+        }
+        if (Dep.target) {// 判断如果有渲染watcher
+            watcher.depend();
+        }
+        return watcher.value;
     }
 }
 
