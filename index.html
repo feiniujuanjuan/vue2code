@@ -1,40 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="./dist/Vue.js"></script>
-</head>
-<body>
-    <div id="app" class="hh" style="color: red; font-size: 12px;">
-        <h1>{{ fullName }}</h1>
+  </head>
+  <body>
+    <div id="app" class="hh" style="color: red; font-size: 12px">
+      <my-button></my-button>
     </div>
     <script>
-        window.vue = new Vue({
-            el: '#app',
-            data() {
-                return {
-                    // msg: 'hello',
-                    // a: 2,
-                    // b: {a: 4},
-                    // list: [1,2,3],
-                    // arr: [{a: 1}],
-                    firstName: 'si',
-                    lastName: 'qi',
-                }
-            },
-            computed: {
-                fullName() {
-                    return this.firstName + this.lastName;
-                }
-            }
-        })
-        setTimeout(() => {
-            vue.lastName = 'yu'
-            console.log(vue.fullName)
-        }, 1000)
-        
+      Vue.component('my-button', {
+        template: '<button>我的按钮</button>'
+      })
+      window.vue = new Vue({
+        el: "#app",
+        data() {
+          return {
+            firstName: "si",
+            lastName: "qi",
+          };
+        },
+      });
+      console.log(vue)
     </script>
-</body>
+  </body>
 </html>
